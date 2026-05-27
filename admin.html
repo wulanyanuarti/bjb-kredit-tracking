@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel AO – Bank BJB Cabang Depok</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #003F87; --blue-mid: #1565C0; --blue-light: #E8F0FB;
+      --yellow: #F9C22B; --yellow-dk: #C9980A;
+      --surface: #F4F7FC; --card: #fff; --border: rgba(0,63,135,.12);
+      --txt: #0D1B2A; --txt-muted: #5B6B80; --txt-light: #8FA0B2;
+      --green: #1A7F4B; --green-bg: #E6F4EE;
+      --red: #991B1B;  --red-bg: #FEF2F2;
+      --r: 12px; --r-sm: 8px;
+    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--surface); color: var(--txt); font-size: 14px; }
+
+    header {
+      background: var(--blue); height: 66px; padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 4px solid var(--yellow); position: sticky; top: 0; z-index: 100;
+    }
+    .logo-area { display: flex; align-items: center; gap: 14px; }
+    .logo-area img { height: 36px; filter: brightness(0) invert(1); }
+    .logo-sub { color: rgba(255,255,255,.65); font-size: 12px; }
+    .hdr-right { display: flex; align-items: center; gap: 12px; }
+    .hdr-badge { background: rgba(249,194,43,.18); border: 1px solid rgba(249,194,43,.4); color: var(--yellow); font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+    .btn-nasabah { background: var(--yellow); color: var(--blue); font-size: 12px; font-weight: 700; padding: 7px 16px; border-radius: var(--r-sm); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+
+    .breadcrumb { background: #fff; border-bottom: 1px solid var(--border); padding: 0 40px; height: 44px; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--txt-muted); }
+    .breadcrumb span { color: var(--blue); font-weight: 600; }
+
+    main { max-width: 1060px; margin: 0 auto; padding: 32px 24px 60px; }
+
+    .page-title { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+    .page-title h1 { font-size: 22px; font-weight: 700; color: var(--blue); }
+    .page-title p  { font-size: 13px; color: var(--txt-muted); margin-top: 5px; }
+
+    .btn-add {
+      height: 42px; padding: 0 22px;
+      background: var(--blue); color: #fff;
+      border: none; border-radius: var(--r-sm);
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0;
+    }
+    .btn-add:hover { background: var(--blue-mid); }
+
+    /* TABLE */
+    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 24px; }
+    .table-header { padding: 18px 24px 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .table-header h2 { font-size: 15px; font-weight: 700; color: var(--blue); }
+    .search-inp {
+      height: 36px; width: 260px;
+      border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      padding: 0 12px 0 34px; font-size: 13px; outline: none;
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238FA0B2' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center;
+    }
+    .search-inp:focus { border-color: var(--blue); background-color: #fff; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--surface); }
+    th { padding: 11px 16px; font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.5px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 13px 16px; font-size: 13px; color: var(--txt); border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface); }
+
+    .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .badge.proses  { background: #FEF3C7; color: #B45309; }
+    .badge.selesai { background: var(--green-bg); color: var(--green); }
+    .badge.pending { background: #EFF6FF; color: #1D4ED8; }
+
+    .act-btn {
+      background: none; border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px; color: var(--txt-muted);
+      transition: background .15s, color .15s;
+    }
+    .act-btn:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+    .act-btn.del:hover { background: var(--red-bg); color: var(--red); border-color: var(--red); }
+
+    /* MODAL OVERLAY */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 999; padding: 20px;
+    }
+    .modal {
+      background: #fff; border-radius: var(--r);
+      width: 100%; max-width: 680px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 32px 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-header h2 { font-size: 18px; font-weight: 700; color: var(--blue); }
+    .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--txt-muted); line-height: 1; }
+    .modal-close:hover { color: var(--txt); }
+
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:560px){ .form-2col { grid-template-columns: 1fr; } }
+    .form-1col { grid-column: 1 / -1; }
+
+    .fgroup { display: flex; flex-direction: column; gap: 6px; }
+    .fgroup label { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.6px; }
+    .fgroup input, .fgroup select {
+      height: 42px; border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      padding: 0 12px; font-size: 14px; color: var(--txt);
+      background: var(--surface); outline: none;
+    }
+    .fgroup input:focus, .fgroup select:focus { border-color: var(--blue); background: #fff; }
+
+    .section-divider {
+      grid-column: 1 / -1;
+      font-size: 11px; font-weight: 700; color: var(--txt-muted);
+      text-transform: uppercase; letter-spacing: 0.7px;
+      padding: 12px 0 4px; border-top: 1px solid var(--border); margin-top: 4px;
+    }
+
+    .step-selector { grid-column: 1 / -1; }
+    .step-options { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .step-opt {
+      padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+      border: 2px solid var(--border); cursor: pointer; color: var(--txt-muted);
+      background: var(--surface); transition: all .15s;
+    }
+    .step-opt.selected { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    .modal-footer { display: flex; gap: 12px; justify-content: flex-end; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .btn-cancel { height: 42px; padding: 0 22px; background: none; border: 1.5px solid var(--border); border-radius: var(--r-sm); font-size: 14px; font-weight: 600; cursor: pointer; color: var(--txt-muted); }
+    .btn-cancel:hover { background: var(--surface); }
+    .btn-save { height: 42px; padding: 0 28px; background: var(--blue); color: #fff; border: none; border-radius: var(--r-sm); font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .btn-save:hover { background: var(--blue-mid); }
+
+    .toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: var(--green); color: #fff;
+      padding: 14px 22px; border-radius: var(--r-sm);
+      font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+      z-index: 9999; opacity: 0; transition: opacity .3s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.err { background: var(--red); }
+
+    .empty-row td { text-align: center; color: var(--txt-muted); padding: 32px; }
+
+    footer { background: var(--blue); color: rgba(255,255,255,.55); text-align: center; font-size: 12px; padding: 18px; border-top: 3px solid var(--yellow); }
+    footer strong { color: rgba(255,255,255,.85); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-area">
+    <img src="assets/logo_bjb.png" alt="Logo Bank BJB" />
+    <div class="logo-sub">Admin Panel – AO</div>
+  </div>
+  <div class="hdr-right">
+    <div class="hdr-badge">Panel Account Officer</div>
+    <a href="index.html" class="btn-nasabah"><i class="ti ti-external-link" style="font-size:14px"></i> Lihat Halaman Nasabah</a>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <i class="ti ti-home" style="font-size:14px"></i>
+  <span style="color:var(--txt-light)">›</span>
+  <span>Admin Panel</span>
+  <span style="color:var(--txt-light)">›</span>
+  <span>Kelola Data Nasabah</span>
+</div>
+
+<main>
+  <div class="page-title">
+    <div>
+      <h1>Kelola Data Pengajuan Kredit</h1>
+      <p>Tambah, edit, atau perbarui status pengajuan kredit nasabah.</p>
+    </div>
+    <button class="btn-add" onclick="openModal()">
+      <i class="ti ti-plus"></i> Tambah Nasabah
+    </button>
+  </div>
+
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Daftar Pengajuan Kredit</h2>
+      <input type="text" class="search-inp" id="search-inp" placeholder="Cari nama atau NIK…" oninput="renderTable()" />
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Nasabah</th>
+            <th>NIK</th>
+            <th>No. Pengajuan</th>
+            <th>Jenis Kredit</th>
+            <th>Tahap</th>
+            <th>Status</th>
+            <th>AO</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-body"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <strong>Bank BJB Cabang Depok</strong> &nbsp;|&nbsp; Admin Panel Account Officer
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="modal-overlay" style="display:none" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Tambah Data Nasabah</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="form-2col">
+      <div class="fgroup">
+        <label>NIK (16 digit) *</label>
+        <input type="text" id="f-nik" maxlength="16" placeholder="3276XXXXXXXXXXXX" />
+      </div>
+      <div class="fgroup">
+        <label>Nama Nasabah *</label>
+        <input type="text" id="f-nama" placeholder="Sesuai KTP" />
+      </div>
+      <div class="fgroup">
+        <label>No. Pengajuan *</label>
+        <input type="text" id="f-nopeng" placeholder="BJB-KPR-2025-XXXXX" />
+      </div>
+      <div class="fgroup">
+        <label>Jenis Kredit *</label>
+        <select id="f-jenis">
+          <option value="">— Pilih —</option>
+          <option>KPR Griya Makmur</option>
+          <option>Kredit Modal Kerja</option>
+          <option>KKB Kendaraan Bermotor</option>
+          <option>Kredit Multiguna</option>
+          <option>Kredit Investasi</option>
+          <option>KUR (Kredit Usaha Rakyat)</option>
+        </select>
+      </div>
+      <div class="fgroup">
+        <label>Plafon Kredit</label>
+        <input type="text" id="f-plafon" placeholder="Rp 000.000.000" />
+      </div>
+      <div class="fgroup">
+        <label>Tenor</label>
+        <input type="text" id="f-tenor" placeholder="60 Bulan (5 Tahun)" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Pengajuan</label>
+        <input type="text" id="f-tgl" placeholder="01 Juni 2025" />
+      </div>
+      <div class="fgroup">
+        <label>Estimasi Proses</label>
+        <input type="text" id="f-estimasi" placeholder="7–10 Hari Kerja" />
+      </div>
+
+      <div class="section-divider">Status Tahap Pengajuan</div>
+
+      <div class="step-selector">
+        <label style="font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:8px">Tahap Saat Ini *</label>
+        <div class="step-options" id="step-options"></div>
+        <input type="hidden" id="f-step" value="0" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Pengajuan Diterima</label>
+        <input type="text" id="sd-0" placeholder="—" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Verifikasi</label>
+        <input type="text" id="sd-1" placeholder="—" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Analisa</label>
+        <input type="text" id="sd-2" placeholder="—" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Approval</label>
+        <input type="text" id="sd-3" placeholder="—" />
+      </div>
+      <div class="fgroup">
+        <label>Tanggal Selesai</label>
+        <input type="text" id="sd-4" placeholder="—" />
+      </div>
+      <div class="fgroup">
+        <label>Label Status</label>
+        <input type="text" id="f-statuslabel" placeholder="Dalam Proses Analisa" />
+      </div>
+
+      <div class="section-divider">Data Account Officer</div>
+
+      <div class="fgroup">
+        <label>Nama AO *</label>
+        <input type="text" id="f-ao-nama" placeholder="Nama Account Officer" />
+      </div>
+      <div class="fgroup">
+        <label>Inisial AO</label>
+        <input type="text" id="f-ao-inisial" maxlength="3" placeholder="AS" />
+      </div>
+      <div class="fgroup">
+        <label>No. Telepon AO</label>
+        <input type="text" id="f-ao-telp" placeholder="0812-XXXX-XXXX" />
+      </div>
+      <div class="fgroup">
+        <label>Email AO</label>
+        <input type="text" id="f-ao-email" placeholder="nama@bankbjb.co.id" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Batal</button>
+      <button class="btn-save" onclick="saveData()">
+        <i class="ti ti-device-floppy"></i> Simpan Data
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg">Tersimpan</span></div>
+
+<script src="data/nasabah.js"></script>
+<script>
+  const STEPS  = ["Pengajuan","Verifikasi","Analisa","Approval","Selesai"];
+  const BADGE_CLS = ["proses","proses","proses","pending","selesai"];
+
+  // Salin array agar bisa di-edit di session ini
+  let DB = JSON.parse(JSON.stringify(NASABAH));
+  let editIndex = -1;
+
+  // Render step-options di modal
+  function buildStepOptions() {
+    const c = document.getElementById('step-options');
+    c.innerHTML = '';
+    STEPS.forEach((s,i) => {
+      const d = document.createElement('div');
+      d.className = 'step-opt' + (i===0?' selected':'');
+      d.textContent = s;
+      d.dataset.idx = i;
+      d.onclick = () => {
+        document.querySelectorAll('.step-opt').forEach(x=>x.classList.remove('selected'));
+        d.classList.add('selected');
+        document.getElementById('f-step').value = i;
+      };
+      c.appendChild(d);
+    });
+  }
+  buildStepOptions();
+
+  function renderTable() {
+    const q = document.getElementById('search-inp').value.toLowerCase();
+    const rows = DB.filter(d =>
+      d.nama.toLowerCase().includes(q) || d.nik.includes(q)
+    );
+    const tbody = document.getElementById('tbl-body');
+    if (!rows.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="8"><i class="ti ti-mood-empty" style="font-size:24px;display:block;margin-bottom:8px"></i>Tidak ada data</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map((d, ri) => {
+      const realIdx = DB.indexOf(d);
+      return `
+      <tr>
+        <td><strong>${d.nama}</strong></td>
+        <td style="font-family:monospace;font-size:12px">${d.nik}</td>
+        <td style="color:var(--blue);font-weight:600">${d.nopeng}</td>
+        <td>${d.jenis}</td>
+        <td>${STEPS[d.activeStep]}</td>
+        <td><span class="badge ${BADGE_CLS[d.activeStep]}">${d.statusLabel}</span></td>
+        <td>${d.ao.nama}</td>
+        <td style="white-space:nowrap">
+          <button class="act-btn" onclick="openEdit(${realIdx})"><i class="ti ti-edit" style="font-size:13px"></i> Edit</button>
+          <button class="act-btn del" onclick="hapus(${realIdx})" style="margin-left:6px"><i class="ti ti-trash" style="font-size:13px"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+  renderTable();
+
+  function openModal(idx=-1) {
+    editIndex = idx;
+    document.getElementById('modal-title').textContent = idx===-1 ? 'Tambah Data Nasabah' : 'Edit Data Nasabah';
+    const d = idx===-1 ? null : DB[idx];
+    const v = (id, val='') => { document.getElementById(id).value = val; };
+
+    v('f-nik',         d?.nik        || '');
+    v('f-nama',        d?.nama       || '');
+    v('f-nopeng',      d?.nopeng     || '');
+    v('f-plafon',      d?.plafon     || '');
+    v('f-tenor',       d?.tenor      || '');
+    v('f-tgl',         d?.tglPengajuan || '');
+    v('f-estimasi',    d?.estimasi   || '');
+    v('f-statuslabel', d?.statusLabel || '');
+    v('f-ao-nama',     d?.ao?.nama   || '');
+    v('f-ao-inisial',  d?.ao?.inisial|| '');
+    v('f-ao-telp',     d?.ao?.telp   || '');
+    v('f-ao-email',    d?.ao?.email  || '');
+
+    const step = d?.activeStep ?? 0;
+    document.getElementById('f-step').value = step;
+    document.querySelectorAll('.step-opt').forEach((el,i)=>{
+      el.classList.toggle('selected', i===step);
+    });
+
+    if (d?.jenis) document.getElementById('f-jenis').value = d.jenis;
+    else document.getElementById('f-jenis').value = '';
+
+    const dates = d?.stepDates || ['—','—','—','—','—'];
+    [0,1,2,3,4].forEach(i => { v('sd-'+i, dates[i]==='—'?'':dates[i]); });
+
+    document.getElementById('modal-overlay').style.display = 'flex';
+  }
+
+  function openEdit(idx) { openModal(idx); }
+
+  function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+  function overlayClick(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
+
+  function saveData() {
+    const nik  = document.getElementById('f-nik').value.trim();
+    const nama = document.getElementById('f-nama').value.trim();
+    const nopeng = document.getElementById('f-nopeng').value.trim();
+    const jenis  = document.getElementById('f-jenis').value;
+    const aoNama = document.getElementById('f-ao-nama').value.trim();
+
+    if (!nik||!nama||!nopeng||!jenis||!aoNama) {
+      toast('Lengkapi semua field wajib (*)', true); return;
+    }
+    const step = parseInt(document.getElementById('f-step').value);
+    const stepDates = [0,1,2,3,4].map(i => {
+      const v = document.getElementById('sd-'+i).value.trim();
+      if (v) return v;
+      if (i < step) return '—';
+      if (i === step) return 'Sedang Berjalan';
+      return '—';
+    });
+
+    const obj = {
+      nik, nama, nopeng, jenis,
+      plafon:       document.getElementById('f-plafon').value.trim()    || '—',
+      tenor:        document.getElementById('f-tenor').value.trim()     || '—',
+      tglPengajuan: document.getElementById('f-tgl').value.trim()       || '—',
+      estimasi:     document.getElementById('f-estimasi').value.trim()  || '—',
+      activeStep:   step,
+      statusLabel:  document.getElementById('f-statuslabel').value.trim() || STEPS[step],
+      stepDates,
+      ao: {
+        nama: aoNama,
+        inisial: document.getElementById('f-ao-inisial').value.trim() || aoNama.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+        telp:  document.getElementById('f-ao-telp').value.trim()  || '—',
+        email: document.getElementById('f-ao-email').value.trim()  || '—',
+      }
+    };
+
+    if (editIndex === -1) DB.push(obj);
+    else DB[editIndex] = obj;
+
+    renderTable();
+    closeModal();
+    toast(editIndex===-1 ? 'Data nasabah berhasil ditambahkan' : 'Data berhasil diperbarui');
+    showExportNote();
+  }
+
+  function hapus(idx) {
+    if (!confirm(`Hapus data nasabah: ${DB[idx].nama}?`)) return;
+    DB.splice(idx, 1);
+    renderTable();
+    toast('Data berhasil dihapus');
+    showExportNote();
+  }
+
+  function toast(msg, err=false) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.className = 'toast show' + (err?' err':'');
+    setTimeout(()=>{ t.classList.remove('show'); }, 3000);
+  }
+
+  function showExportNote() {
+    if (document.getElementById('export-note')) return;
+    const note = document.createElement('div');
+    note.id = 'export-note';
+    note.style.cssText = 'background:#FEF9E7;border:1px solid #D4A00A;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#92650A;display:flex;gap:10px;align-items:flex-start;';
+    note.innerHTML = `<i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0"></i>
+      <div><strong>Catatan:</strong> Perubahan data hanya tersimpan sementara di browser ini. Untuk menyimpan permanen, salin output dari tombol di bawah ke file <code>data/nasabah.js</code> kemudian upload ulang ke Vercel.
+      <br><br><button onclick="exportJS()" style="background:var(--blue);color:#fff;border:none;border-radius:6px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px"><i class="ti ti-download" style="font-size:14px"></i> Salin / Download nasabah.js</button></div>`;
+    document.querySelector('main').insertBefore(note, document.querySelector('.table-card'));
+  }
+
+  function exportJS() {
+    const txt = `const NASABAH = ${JSON.stringify(DB, null, 2)};`;
+    const blob = new Blob([txt], {type:'text/javascript'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'nasabah.js';
+    a.click();
+    toast('File nasabah.js berhasil didownload');
+  }
+</script>
+</body>
+</html>
