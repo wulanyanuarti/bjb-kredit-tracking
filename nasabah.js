@@ -7,8 +7,8 @@ const NASABAH = [
   {
     nik: "3276010101900001",
     nama: "Budi Santoso",
-    nopeng: "BJB-KPR-2025-00431",
-    jenis: "KPR Griya Makmur",
+    nopeng: "BJB-PNS-2025-00431",
+    jenis: "Penisunan",
     plafon: "Rp 450.000.000",
     tenor: "180 Bulan (15 Tahun)",
     tglPengajuan: "12 Juni 2025",
@@ -27,8 +27,8 @@ const NASABAH = [
   {
     nik: "3276020202850002",
     nama: "Siti Rahayu",
-    nopeng: "BJB-KMK-2025-00287",
-    jenis: "Kredit Modal Kerja",
+    nopeng: "BJB-PNS-2025-00287",
+    jenis: "SK PNS",
     plafon: "Rp 200.000.000",
     tenor: "60 Bulan (5 Tahun)",
     tglPengajuan: "05 Juni 2025",
@@ -46,8 +46,8 @@ const NASABAH = [
   {
     nik: "3276030303750003",
     nama: "Rudi Firmansyah",
-    nopeng: "BJB-KKB-2025-00112",
-    jenis: "KKB Kendaraan Bermotor",
+    nopeng: "BJB-PNS-2025-00112",
+    jenis: "SK",
     plafon: "Rp 85.000.000",
     tenor: "48 Bulan (4 Tahun)",
     tglPengajuan: "28 Mei 2025",
