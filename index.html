@@ -6,249 +6,94 @@
   <title>Tracking Pengajuan Kredit – Bank BJB Cabang Depok</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --blue:        #003F87;
-      --blue-mid:    #1565C0;
-      --blue-light:  #E8F0FB;
-      --yellow:      #F9C22B;
-      --yellow-dk:   #C9980A;
-      --yellow-lt:   #FEF9E7;
-      --surface:     #F4F7FC;
-      --card:        #ffffff;
-      --border:      rgba(0,63,135,0.12);
-      --txt:         #0D1B2A;
-      --txt-muted:   #5B6B80;
-      --txt-light:   #8FA0B2;
-      --green:       #1A7F4B;
-      --green-bg:    #E6F4EE;
-      --orange:      #B45309;
-      --orange-bg:   #FEF3C7;
-      --r:           12px;
-      --r-sm:        8px;
-    }
-
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--surface); color: var(--txt); font-size: 14px; }
-
-    /* ── HEADER ── */
-    header {
-      background: var(--blue);
-      padding: 0 40px;
-      height: 66px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 4px solid var(--yellow);
-      position: sticky; top: 0; z-index: 100;
-    }
-    .logo-area { display: flex; align-items: center; gap: 14px; }
-    .logo-area img { height: 36px; filter: brightness(0) invert(1); }
-    .logo-sub { color: rgba(255,255,255,0.65); font-size: 12px; letter-spacing: 0.5px; margin-top: 2px; }
-    .hdr-badge {
-      background: rgba(249,194,43,0.18);
-      border: 1px solid rgba(249,194,43,0.4);
-      color: var(--yellow); font-size: 11px; font-weight: 600;
-      padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px;
-    }
-
-    /* ── BREADCRUMB ── */
-    .breadcrumb {
-      background: #fff; border-bottom: 1px solid var(--border);
-      padding: 0 40px; height: 44px;
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13px; color: var(--txt-muted);
-    }
-    .breadcrumb span { color: var(--blue); font-weight: 600; }
-
-    /* ── MAIN ── */
-    main { max-width: 1060px; margin: 0 auto; padding: 32px 24px 60px; }
-
-    .page-title { margin-bottom: 24px; }
-    .page-title h1 { font-size: 22px; font-weight: 700; color: var(--blue); }
-    .page-title p  { font-size: 13px; color: var(--txt-muted); margin-top: 5px; }
-
-    /* ── SEARCH CARD ── */
-    .search-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 28px 32px;
-      margin-bottom: 28px;
-      border-left: 4px solid var(--yellow);
-    }
-    .search-card h2 { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 18px; }
-
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 16px; align-items: end; }
-    @media(max-width:700px){ .form-grid { grid-template-columns: 1fr; } }
-
-    .field label {
-      display: block; font-size: 11px; font-weight: 700;
-      color: var(--txt-muted); letter-spacing: 0.7px;
-      text-transform: uppercase; margin-bottom: 6px;
-    }
-    .field input {
-      width: 100%; height: 44px;
-      border: 1.5px solid var(--border); border-radius: var(--r-sm);
-      padding: 0 14px; font-size: 14px; color: var(--txt);
-      background: var(--surface); outline: none;
-      transition: border-color .2s, background .2s;
-    }
-    .field input:focus { border-color: var(--blue); background: #fff; }
-    .field input::placeholder { color: var(--txt-light); }
-
-    .btn-cek {
-      height: 44px; padding: 0 28px;
-      background: var(--blue); color: #fff;
-      border: none; border-radius: var(--r-sm);
-      font-size: 14px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; gap: 8px;
-      transition: background .2s;
-      white-space: nowrap;
-    }
-    .btn-cek:hover { background: var(--blue-mid); }
-
-    /* ── ERROR ── */
-    .error-box {
-      background: #FEF2F2; border: 1px solid #FECACA;
-      border-radius: var(--r-sm); padding: 14px 18px;
-      color: #991B1B; font-size: 13px;
-      display: flex; gap: 10px; align-items: center;
-      margin-bottom: 20px;
-    }
-    .error-box i { font-size: 18px; flex-shrink: 0; }
-
-    /* ── RESULT ── */
-    #result { display: none; }
-
-    /* info row */
-    .info-row {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 14px; margin-bottom: 18px;
-    }
-    @media(max-width:700px){ .info-row { grid-template-columns: 1fr 1fr; } }
-
-    .icard {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 16px 18px;
-    }
-    .icard .lbl { font-size: 11px; font-weight: 700; color: var(--txt-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 7px; }
-    .icard .val { font-size: 14px; font-weight: 700; color: var(--txt); }
-    .icard .val.accent { color: var(--blue); }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; font-weight: 700; padding: 4px 11px; border-radius: 20px;
-    }
-    .badge.proses  { background: var(--orange-bg); color: var(--orange); }
-    .badge.selesai { background: var(--green-bg);  color: var(--green); }
-    .badge.pending { background: #EFF6FF; color: #1D4ED8; }
-
-    /* progress */
-    .prog-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 26px 30px; margin-bottom: 18px;
-    }
-    .section-label {
-      font-size: 11px; font-weight: 700; color: var(--txt-muted);
-      text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 24px;
-    }
-    .steps { display: flex; align-items: flex-start; }
-    .step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
-    .step:not(:last-child)::after {
-      content: ''; position: absolute; top: 18px; left: 50%; width: 100%; height: 3px;
-      background: var(--border); z-index: 0;
-    }
-    .step.done:not(:last-child)::after { background: var(--blue); }
-    .step.active:not(:last-child)::after {
-      background: linear-gradient(to right, var(--blue) 0%, var(--border) 100%);
-    }
-    .s-circle {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--surface); border: 2.5px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; color: var(--txt-light); z-index: 1; position: relative;
-    }
-    .step.done   .s-circle { background: var(--blue);   border-color: var(--blue);   color: #fff; }
-    .step.active .s-circle { background: var(--yellow); border-color: var(--yellow-dk); color: var(--blue); box-shadow: 0 0 0 5px rgba(249,194,43,.2); }
-    .s-name { font-size: 12px; font-weight: 700; color: var(--txt-muted); text-align: center; margin-top: 9px; }
-    .s-date { font-size: 10px; color: var(--txt-light); text-align: center; margin-top: 3px; }
-    .step.done   .s-name { color: var(--blue); }
-    .step.active .s-name { color: var(--yellow-dk); }
-
-    .pbar-wrap { margin-top: 22px; }
-    .pbar-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--txt-muted); margin-bottom: 6px; }
-    .pbar-track { height: 6px; background: var(--blue-light); border-radius: 3px; overflow: hidden; }
-    .pbar-fill  { height: 100%; background: var(--blue); border-radius: 3px; transition: width 1.2s ease; }
-
-    /* detail + AO */
-    .detail-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; margin-bottom: 18px; }
-    @media(max-width:700px){ .detail-grid { grid-template-columns: 1fr; } }
-
-    .dcard {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 22px 26px;
-    }
-    .dcard h3 { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 16px; }
-    .dtable { width: 100%; border-collapse: collapse; }
-    .dtable tr + tr td { border-top: 1px solid var(--border); }
-    .dtable td { padding: 9px 0; vertical-align: top; }
-    .dtable td:first-child { font-size: 12px; color: var(--txt-muted); font-weight: 600; width: 46%; padding-right: 8px; }
-    .dtable td:last-child  { font-size: 13px; font-weight: 600; color: var(--txt); }
-
-    .ao-card {
-      background: var(--blue-light); border: 1px solid rgba(0,63,135,.15);
-      border-radius: var(--r); padding: 22px 26px;
-    }
-    .ao-card h3 { font-size: 11px; font-weight: 700; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 16px; }
-    .ao-avatar {
-      width: 46px; height: 46px; border-radius: 50%;
-      background: var(--blue); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 700; margin-bottom: 12px;
-    }
-    .ao-nama { font-size: 16px; font-weight: 700; color: var(--blue); }
-    .ao-role { font-size: 12px; color: var(--txt-muted); margin-bottom: 14px; }
-    .ao-row { display: flex; align-items: center; gap: 9px; font-size: 13px; padding: 7px 0; color: var(--txt); }
-    .ao-row i { font-size: 15px; color: var(--blue); flex-shrink: 0; }
-    .ao-row + .ao-row { border-top: 1px solid rgba(0,63,135,.1); }
-
-    /* note */
-    .note {
-      background: var(--yellow-lt); border: 1px solid rgba(201,152,10,.25);
-      border-radius: var(--r-sm); padding: 14px 18px;
-      display: flex; gap: 10px; align-items: flex-start;
-      font-size: 12px; color: #92650A;
-    }
-    .note i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-    /* empty */
-    .empty {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 56px 24px; text-align: center;
-    }
-    .empty i { font-size: 44px; color: var(--blue-light); display: block; margin-bottom: 14px; }
-    .empty p { color: var(--txt-muted); font-size: 14px; line-height: 1.7; }
-
-    /* footer */
-    footer {
-      background: var(--blue); color: rgba(255,255,255,.55);
-      text-align: center; font-size: 12px; padding: 18px;
-      border-top: 3px solid var(--yellow);
-    }
-    footer strong { color: rgba(255,255,255,.85); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--blue:#003F87;--blue-mid:#1565C0;--blue-light:#E8F0FB;--yellow:#F9C22B;--yellow-dk:#C9980A;--yellow-lt:#FEF9E7;--surface:#F4F7FC;--card:#fff;--border:rgba(0,63,135,.12);--txt:#0D1B2A;--txt-muted:#5B6B80;--txt-light:#8FA0B2;--green:#1A7F4B;--green-bg:#E6F4EE;--orange:#B45309;--orange-bg:#FEF3C7;--r:12px;--r-sm:8px}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:var(--surface);color:var(--txt);font-size:14px}
+    header{background:var(--blue);padding:0 24px;height:66px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--yellow);position:sticky;top:0;z-index:100}
+    .logo-area{display:flex;align-items:center;gap:12px}
+    .logo-area img{height:34px}
+    .logo-sub{color:rgba(255,255,255,.65);font-size:12px;letter-spacing:.5px;margin-top:2px}
+    .hdr-badge{background:rgba(249,194,43,.18);border:1px solid rgba(249,194,43,.4);color:var(--yellow);font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+    .breadcrumb{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:44px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt-muted)}
+    .breadcrumb span{color:var(--blue);font-weight:600}
+    main{max-width:1060px;margin:0 auto;padding:28px 16px 60px}
+    .page-title{margin-bottom:22px}
+    .page-title h1{font-size:20px;font-weight:700;color:var(--blue)}
+    .page-title p{font-size:13px;color:var(--txt-muted);margin-top:5px}
+    .search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px 24px;margin-bottom:24px;border-left:4px solid var(--yellow)}
+    .search-card h2{font-size:15px;font-weight:700;color:var(--blue);margin-bottom:16px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end}
+    @media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+    .field label{display:block;font-size:11px;font-weight:700;color:var(--txt-muted);letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px}
+    .field input{width:100%;height:44px;border:1.5px solid var(--border);border-radius:var(--r-sm);padding:0 14px;font-size:14px;color:var(--txt);background:var(--surface);outline:none;transition:border-color .2s,background .2s}
+    .field input:focus{border-color:var(--blue);background:#fff}
+    .field input::placeholder{color:var(--txt-light)}
+    .btn-cek{height:44px;padding:0 24px;background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s;white-space:nowrap}
+    .btn-cek:hover{background:var(--blue-mid)}
+    .error-box{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--r-sm);padding:14px 18px;color:#991B1B;font-size:13px;display:flex;gap:10px;align-items:center;margin-bottom:18px}
+    #result{display:none}
+    .info-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+    @media(max-width:640px){.info-row{grid-template-columns:1fr 1fr}}
+    .icard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+    .icard .lbl{font-size:11px;font-weight:700;color:var(--txt-light);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+    .icard .val{font-size:14px;font-weight:700;color:var(--txt)}
+    .icard .val.accent{color:var(--blue)}
+    .badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px}
+    .badge.proses{background:var(--orange-bg);color:var(--orange)}
+    .badge.selesai{background:var(--green-bg);color:var(--green)}
+    .badge.pending{background:#EFF6FF;color:#1D4ED8}
+    .prog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px 24px;margin-bottom:16px}
+    .section-label{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:22px}
+    .steps{display:flex;align-items:flex-start}
+    .step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+    .step:not(:last-child)::after{content:'';position:absolute;top:18px;left:50%;width:100%;height:3px;background:var(--border);z-index:0}
+    .step.done:not(:last-child)::after{background:var(--blue)}
+    .step.active:not(:last-child)::after{background:linear-gradient(to right,var(--blue) 0%,var(--border) 100%)}
+    .s-circle{width:36px;height:36px;border-radius:50%;background:var(--surface);border:2.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--txt-light);z-index:1;position:relative}
+    .step.done .s-circle{background:var(--blue);border-color:var(--blue);color:#fff}
+    .step.active .s-circle{background:var(--yellow);border-color:var(--yellow-dk);color:var(--blue);box-shadow:0 0 0 5px rgba(249,194,43,.2)}
+    .s-name{font-size:11px;font-weight:700;color:var(--txt-muted);text-align:center;margin-top:8px}
+    .s-date{font-size:10px;color:var(--txt-light);text-align:center;margin-top:2px}
+    .step.done .s-name{color:var(--blue)}
+    .step.active .s-name{color:var(--yellow-dk)}
+    .pbar-wrap{margin-top:20px}
+    .pbar-top{display:flex;justify-content:space-between;font-size:12px;color:var(--txt-muted);margin-bottom:6px}
+    .pbar-track{height:6px;background:var(--blue-light);border-radius:3px;overflow:hidden}
+    .pbar-fill{height:100%;background:var(--blue);border-radius:3px;transition:width 1.2s ease}
+    .detail-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px}
+    @media(max-width:640px){.detail-grid{grid-template-columns:1fr}}
+    .dcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px}
+    .dcard h3{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
+    .dtable{width:100%;border-collapse:collapse}
+    .dtable tr+tr td{border-top:1px solid var(--border)}
+    .dtable td{padding:9px 0;vertical-align:top}
+    .dtable td:first-child{font-size:12px;color:var(--txt-muted);font-weight:600;width:46%;padding-right:8px}
+    .dtable td:last-child{font-size:13px;font-weight:600;color:var(--txt)}
+    .ao-card{background:var(--blue-light);border:1px solid rgba(0,63,135,.15);border-radius:var(--r);padding:20px 22px}
+    .ao-card h3{font-size:11px;font-weight:700;color:var(--txt-muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px}
+    .ao-avatar{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;margin-bottom:10px}
+    .ao-nama{font-size:15px;font-weight:700;color:var(--blue)}
+    .ao-role{font-size:12px;color:var(--txt-muted);margin-bottom:12px}
+    .ao-row{display:flex;align-items:center;gap:9px;font-size:13px;padding:7px 0;color:var(--txt)}
+    .ao-row i{font-size:15px;color:var(--blue);flex-shrink:0}
+    .ao-row+.ao-row{border-top:1px solid rgba(0,63,135,.1)}
+    .note{background:var(--yellow-lt);border:1px solid rgba(201,152,10,.25);border-radius:var(--r-sm);padding:14px 18px;display:flex;gap:10px;align-items:flex-start;font-size:12px;color:#92650A}
+    .note i{font-size:16px;flex-shrink:0;margin-top:1px}
+    .empty{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:48px 24px;text-align:center}
+    .empty i{font-size:40px;color:var(--blue-light);display:block;margin-bottom:12px}
+    .empty p{color:var(--txt-muted);font-size:14px;line-height:1.7}
+    footer{background:var(--blue);color:rgba(255,255,255,.55);text-align:center;font-size:12px;padding:16px;border-top:3px solid var(--yellow)}
+    footer strong{color:rgba(255,255,255,.85)}
   </style>
 </head>
 <body>
-
 <header>
   <div class="logo-area">
-    <img src="assets/logo_bjb.png" alt="Logo Bank BJB" />
+    <img src="data:image/png;base64,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" alt="Logo Bank BJB" />
     <div class="logo-sub">Cabang Depok</div>
   </div>
   <div class="hdr-badge">Tracking Pengajuan Kredit</div>
 </header>
-
 <div class="breadcrumb">
   <i class="ti ti-home" style="font-size:14px"></i>
   <span style="color:var(--txt-light)">›</span>
@@ -256,70 +101,35 @@
   <span style="color:var(--txt-light)">›</span>
   <span>Cek Status</span>
 </div>
-
 <main>
   <div class="page-title">
     <h1>Pelacakan Status Pengajuan Kredit</h1>
     <p>Masukkan NIK dan nama nasabah sesuai KTP untuk melihat status pengajuan kredit Anda.</p>
   </div>
-
   <div class="search-card">
     <h2><i class="ti ti-search" style="font-size:15px;vertical-align:-2px;margin-right:6px"></i>Cek Status Pengajuan</h2>
     <div class="form-grid">
-      <div class="field">
-        <label>NIK (16 digit)</label>
-        <input type="text" id="inp-nik" placeholder="Contoh: 3276XXXXXXXXXXXX" maxlength="16" />
-      </div>
-      <div class="field">
-        <label>Nama Nasabah</label>
-        <input type="text" id="inp-nama" placeholder="Sesuai KTP" />
-      </div>
-      <button class="btn-cek" onclick="cekStatus()">
-        <i class="ti ti-search"></i> Cek Status
-      </button>
+      <div class="field"><label>NIK (16 digit)</label><input type="text" id="inp-nik" placeholder="Contoh: 3276XXXXXXXXXXXX" maxlength="16" /></div>
+      <div class="field"><label>Nama Nasabah</label><input type="text" id="inp-nama" placeholder="Sesuai KTP" /></div>
+      <button class="btn-cek" onclick="cekStatus()"><i class="ti ti-search"></i> Cek Status</button>
     </div>
   </div>
-
-  <div id="error-box" class="error-box" style="display:none">
-    <i class="ti ti-alert-circle"></i>
-    <span id="error-msg"></span>
-  </div>
-
-  <!-- RESULT -->
+  <div id="error-box" class="error-box" style="display:none"><i class="ti ti-alert-circle"></i><span id="error-msg"></span></div>
   <div id="result">
     <div class="info-row">
-      <div class="icard">
-        <div class="lbl">Nama Nasabah</div>
-        <div class="val accent" id="r-nama">—</div>
-      </div>
-      <div class="icard">
-        <div class="lbl">No. Pengajuan</div>
-        <div class="val accent" id="r-nopeng">—</div>
-      </div>
-      <div class="icard">
-        <div class="lbl">Jenis Kredit</div>
-        <div class="val" id="r-jenis">—</div>
-      </div>
-      <div class="icard">
-        <div class="lbl">Status</div>
-        <div id="r-status">—</div>
-      </div>
+      <div class="icard"><div class="lbl">Nama Nasabah</div><div class="val accent" id="r-nama">—</div></div>
+      <div class="icard"><div class="lbl">No. Pengajuan</div><div class="val accent" id="r-nopeng">—</div></div>
+      <div class="icard"><div class="lbl">Jenis Kredit</div><div class="val" id="r-jenis">—</div></div>
+      <div class="icard"><div class="lbl">Status</div><div id="r-status">—</div></div>
     </div>
-
     <div class="prog-card">
       <div class="section-label"><i class="ti ti-list-check" style="font-size:14px;vertical-align:-2px;margin-right:5px"></i>Tahap Proses Pengajuan</div>
       <div class="steps" id="steps-container"></div>
       <div class="pbar-wrap">
-        <div class="pbar-top">
-          <span>Progress Pengajuan</span>
-          <span id="r-pct">0%</span>
-        </div>
-        <div class="pbar-track">
-          <div class="pbar-fill" id="r-pbar" style="width:0%"></div>
-        </div>
+        <div class="pbar-top"><span>Progress Pengajuan</span><span id="r-pct">0%</span></div>
+        <div class="pbar-track"><div class="pbar-fill" id="r-pbar" style="width:0%"></div></div>
       </div>
     </div>
-
     <div class="detail-grid">
       <div class="dcard">
         <h3><i class="ti ti-file-description" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>Detail Pengajuan</h3>
@@ -339,129 +149,25 @@
         <div class="ao-role">Account Officer — Unit Kredit</div>
         <div class="ao-row"><i class="ti ti-phone"></i><span id="r-ao-telp">—</span></div>
         <div class="ao-row"><i class="ti ti-mail"></i><span id="r-ao-email">—</span></div>
-        <div class="ao-row"><i class="ti ti-map-pin"></i><span>Jl. Margonda Raya No. 77, Depok</span></div>
+        <div class="ao-row"><i class="ti ti-map-pin"></i><span>Jl. Margonda No.29, Pancoran Mas, Kota Depok 16431</span></div>
+        <div class="ao-row"><i class="ti ti-clock"></i><span>Senin–Jumat 08.00–15.00 (Hari Libur Tutup)</span></div>
       </div>
     </div>
-
-    <div class="note">
-      <i class="ti ti-info-circle"></i>
-      <div>Informasi status diperbarui oleh Account Officer. Untuk pertanyaan lebih lanjut, hubungi AO yang tertera atau kunjungi Kantor Cabang BJB Depok. Estimasi proses dapat berubah tergantung kelengkapan dokumen.</div>
-    </div>
+    <div class="note"><i class="ti ti-info-circle"></i><div>Informasi status diperbarui oleh Account Officer. Untuk pertanyaan lebih lanjut, hubungi AO yang tertera atau kunjungi Kantor Cabang BJB Depok.</div></div>
   </div>
-
-  <div id="empty" class="empty">
-    <i class="ti ti-credit-card"></i>
-    <p>Masukkan NIK dan nama nasabah<br>untuk melihat status pengajuan kredit Anda.</p>
-  </div>
+  <div id="empty" class="empty"><i class="ti ti-credit-card"></i><p>Masukkan NIK dan nama nasabah<br>untuk melihat status pengajuan kredit Anda.</p></div>
 </main>
-
-<footer>
-  <strong>Bank BJB Cabang Depok</strong> &nbsp;|&nbsp; Jl. Margonda Raya No. 77, Depok &nbsp;|&nbsp; Layanan: (021) 7777-1234
-</footer>
-
-<!-- Load data nasabah -->
-<script src="data/nasabah.js"></script>
+<footer><strong>Bank BJB Kantor Cabang Depok</strong> &nbsp;|&nbsp; Jl. Margonda No.29, Pancoran Mas, Kota Depok 16431 &nbsp;|&nbsp; Telp: (021) 7777772 &nbsp;|&nbsp; Senin–Jumat 08.00–15.00</footer>
 <script>
-  const STEPS_INFO = [
-    { name: "Pengajuan",  icon: "ti-send" },
-    { name: "Verifikasi", icon: "ti-shield-check" },
-    { name: "Analisa",    icon: "ti-chart-dots" },
-    { name: "Approval",   icon: "ti-stamp" },
-    { name: "Selesai",    icon: "ti-circle-check" }
-  ];
-  const PCT = [0, 25, 50, 75, 100];
-
-  function renderSteps(data) {
-    const container = document.getElementById('steps-container');
-    container.innerHTML = '';
-    STEPS_INFO.forEach((s, i) => {
-      const cls = i < data.activeStep ? 'done' : i === data.activeStep ? 'active' : '';
-      const iconHtml = i < data.activeStep
-        ? '<i class="ti ti-check"></i>'
-        : `<i class="ti ${s.icon}"></i>`;
-      container.innerHTML += `
-        <div class="step ${cls}">
-          <div class="s-circle">${iconHtml}</div>
-          <div class="s-name">${s.name}</div>
-          <div class="s-date">${data.stepDates[i]}</div>
-        </div>`;
-    });
-  }
-
-  function badgeHTML(activeStep, label) {
-    let cls = 'proses';
-    if (activeStep >= 4) cls = 'selesai';
-    else if (activeStep >= 3) cls = 'pending';
-    return `<span class="badge ${cls}"><i class="ti ti-loader" style="font-size:12px"></i> ${label}</span>`;
-  }
-
-  function cekStatus() {
-    const nik  = document.getElementById('inp-nik').value.trim();
-    const nama = document.getElementById('inp-nama').value.trim().toLowerCase();
-
-    document.getElementById('error-box').style.display = 'none';
-
-    if (!nik && !nama) {
-      showError('Silakan masukkan NIK atau Nama Nasabah terlebih dahulu.');
-      return;
-    }
-
-    // Validasi: harus KEDUANYA cocok jika keduanya diisi
-    let found = null;
-    if (nik && nama) {
-      found = NASABAH.find(d => d.nik === nik && d.nama.toLowerCase() === nama);
-      if (!found) {
-        showError('Data tidak ditemukan. Pastikan NIK dan Nama Nasabah sesuai dengan data pendaftaran kredit.');
-        document.getElementById('result').style.display = 'none';
-        document.getElementById('empty').style.display = 'block';
-        return;
-      }
-    } else if (nik) {
-      found = NASABAH.find(d => d.nik === nik);
-    } else {
-      found = NASABAH.find(d => d.nama.toLowerCase() === nama);
-    }
-
-    if (!found) {
-      showError('Data pengajuan tidak ditemukan. Periksa kembali NIK atau Nama yang Anda masukkan.');
-      document.getElementById('result').style.display = 'none';
-      document.getElementById('empty').style.display = 'block';
-      return;
-    }
-
-    // Render
-    document.getElementById('empty').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
-
-    document.getElementById('r-nama').textContent   = found.nama;
-    document.getElementById('r-nopeng').textContent = found.nopeng;
-    document.getElementById('r-jenis').textContent  = found.jenis;
-    document.getElementById('r-status').innerHTML   = badgeHTML(found.activeStep, found.statusLabel);
-    document.getElementById('r-tgl').textContent      = found.tglPengajuan;
-    document.getElementById('r-plafon').textContent   = found.plafon;
-    document.getElementById('r-tenor').textContent    = found.tenor;
-    document.getElementById('r-tahap').textContent    = STEPS_INFO[found.activeStep].name;
-    document.getElementById('r-estimasi').textContent = found.estimasi;
-    document.getElementById('r-ao-avatar').textContent = found.ao.inisial;
-    document.getElementById('r-ao-nama').textContent   = found.ao.nama;
-    document.getElementById('r-ao-telp').textContent   = found.ao.telp;
-    document.getElementById('r-ao-email').textContent  = found.ao.email;
-
-    const pct = PCT[found.activeStep];
-    document.getElementById('r-pct').textContent    = pct + '%';
-    document.getElementById('r-pbar').style.width   = pct + '%';
-
-    renderSteps(found);
-  }
-
-  function showError(msg) {
-    const box = document.getElementById('error-box');
-    document.getElementById('error-msg').textContent = msg;
-    box.style.display = 'flex';
-  }
-
-  document.getElementById('inp-nik').addEventListener('keydown',  e => { if(e.key==='Enter') cekStatus(); });
-  document.getElementById('inp-nama').addEventListener('keydown', e => { if(e.key==='Enter') cekStatus(); });
+const NASABAH=[{nik:"3276010101900001",nama:"Budi Santoso",nopeng:"BJB-KPR-2025-00431",jenis:"KPR Griya Makmur",plafon:"Rp 450.000.000",tenor:"180 Bulan (15 Tahun)",tglPengajuan:"12 Juni 2025",estimasi:"7–10 Hari Kerja",activeStep:2,statusLabel:"Dalam Proses Analisa",stepDates:["12 Jun 2025","14 Jun 2025","Sedang Berjalan","—","—"],ao:{nama:"Ahmad Santoso",inisial:"AS",telp:"0812-3456-7890",email:"a.santoso@bankbjb.co.id"}},{nik:"3276020202850002",nama:"Siti Rahayu",nopeng:"BJB-KMK-2025-00287",jenis:"Kredit Modal Kerja",plafon:"Rp 200.000.000",tenor:"60 Bulan (5 Tahun)",tglPengajuan:"05 Juni 2025",estimasi:"3–5 Hari Kerja",activeStep:3,statusLabel:"Menunggu Approval",stepDates:["05 Jun 2025","07 Jun 2025","10 Jun 2025","Sedang Berjalan","—"],ao:{nama:"Dewi Puspita",inisial:"DP",telp:"0821-9876-5432",email:"d.puspita@bankbjb.co.id"}},{nik:"3276030303750003",nama:"Rudi Firmansyah",nopeng:"BJB-KKB-2025-00112",jenis:"KKB Kendaraan Bermotor",plafon:"Rp 85.000.000",tenor:"48 Bulan (4 Tahun)",tglPengajuan:"28 Mei 2025",estimasi:"1–2 Hari Kerja",activeStep:4,statusLabel:"Disetujui – Siap Cair",stepDates:["28 Mei 2025","29 Mei 2025","02 Jun 2025","04 Jun 2025","06 Jun 2025"],ao:{nama:"Hendra Wijaya",inisial:"HW",telp:"0813-1111-2222",email:"h.wijaya@bankbjb.co.id"}}];
+const STEPS=[{name:"Pengajuan",icon:"ti-send"},{name:"Verifikasi",icon:"ti-shield-check"},{name:"Analisa",icon:"ti-chart-dots"},{name:"Approval",icon:"ti-stamp"},{name:"Selesai",icon:"ti-circle-check"}];
+const PCT=[0,25,50,75,100];
+function renderSteps(d){const c=document.getElementById('steps-container');c.innerHTML='';STEPS.forEach((s,i)=>{const cls=i<d.activeStep?'done':i===d.activeStep?'active':'';const ic=i<d.activeStep?'<i class="ti ti-check"></i>':`<i class="ti ${s.icon}"></i>`;c.innerHTML+=`<div class="step ${cls}"><div class="s-circle">${ic}</div><div class="s-name">${s.name}</div><div class="s-date">${d.stepDates[i]}</div></div>`;})}
+function badgeHTML(step,label){let cls=step>=4?'selesai':step>=3?'pending':'proses';return`<span class="badge ${cls}">${label}</span>`}
+function cekStatus(){const nik=document.getElementById('inp-nik').value.trim();const nama=document.getElementById('inp-nama').value.trim().toLowerCase();document.getElementById('error-box').style.display='none';if(!nik&&!nama){showError('Silakan masukkan NIK atau Nama Nasabah.');return}let found=null;if(nik&&nama){found=NASABAH.find(d=>d.nik===nik&&d.nama.toLowerCase()===nama);if(!found){showError('Data tidak ditemukan. Pastikan NIK dan Nama sesuai data pendaftaran kredit.');document.getElementById('result').style.display='none';document.getElementById('empty').style.display='block';return}}else if(nik){found=NASABAH.find(d=>d.nik===nik)}else{found=NASABAH.find(d=>d.nama.toLowerCase()===nama)}if(!found){showError('Data pengajuan tidak ditemukan. Periksa kembali NIK atau Nama Anda.');document.getElementById('result').style.display='none';document.getElementById('empty').style.display='block';return}document.getElementById('empty').style.display='none';document.getElementById('result').style.display='block';document.getElementById('r-nama').textContent=found.nama;document.getElementById('r-nopeng').textContent=found.nopeng;document.getElementById('r-jenis').textContent=found.jenis;document.getElementById('r-status').innerHTML=badgeHTML(found.activeStep,found.statusLabel);document.getElementById('r-tgl').textContent=found.tglPengajuan;document.getElementById('r-plafon').textContent=found.plafon;document.getElementById('r-tenor').textContent=found.tenor;document.getElementById('r-tahap').textContent=STEPS[found.activeStep].name;document.getElementById('r-estimasi').textContent=found.estimasi;document.getElementById('r-ao-avatar').textContent=found.ao.inisial;document.getElementById('r-ao-nama').textContent=found.ao.nama;document.getElementById('r-ao-telp').textContent=found.ao.telp;document.getElementById('r-ao-email').textContent=found.ao.email;const pct=PCT[found.activeStep];document.getElementById('r-pct').textContent=pct+'%';document.getElementById('r-pbar').style.width=pct+'%';renderSteps(found)}
+function showError(msg){const b=document.getElementById('error-box');document.getElementById('error-msg').textContent=msg;b.style.display='flex'}
+document.getElementById('inp-nik').addEventListener('keydown',e=>{if(e.key==='Enter')cekStatus()});
+document.getElementById('inp-nama').addEventListener('keydown',e=>{if(e.key==='Enter')cekStatus()});
 </script>
 </body>
 </html>
